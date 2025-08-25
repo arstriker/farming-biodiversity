@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Farming Biodiversity App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'farm-green': '#22c55e',
+                        'farm-dark': '#166534',
+                        'farm-light': '#dcfce7',
+                        'farm-accent': '#10b981',
+                        'farm-secondary': '#059669'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'slide-in-left': 'slideInLeft 0.8s ease-out',
+                        'slide-in-right': 'slideInRight 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.4s ease-out',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'gradient-y': 'gradient-y 15s ease infinite',
+                        'gradient-xy': 'gradient-xy 15s ease infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        },
+                        'gradient-y': {
+                            '0%, 100%': {
+                                'background-size': '400% 400%',
+                                'background-position': 'center top'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'center center'
+                            }
+                        },
+                        'gradient-x': {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        },
+                        'gradient-xy': {
+                            '0%, 100%': {
+                                'background-size': '400% 400%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        }
+                    },
+                    backgroundImage: {
+                        'farm-pattern': "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%2322c55e\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"
+                    },
+                    screens: {
+                        'xs': '475px',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .shadow-glow {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
+        }
+
+        .animated-bg {
+            background: linear-gradient(-45deg, #dcfce7, #f0fdf4, #ecfdf5, #d1fae5);
+            background-size: 400% 400%;
+            animation: gradient-xy 15s ease infinite;
+        }
+
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+        }
+
+        .stagger-animation>* {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .stagger-animation>*:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-animation>*:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-animation>*:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-animation>*:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-animation>*:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-padding {
+                padding: 1rem;
+            }
+
+            .mobile-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="animated-bg min-h-screen bg-farm-pattern" <!-- Header -->
+    <header class="glass-effect shadow-2xl border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+            <div class="flex flex-col sm:flex-row items-center justify-center animate-fade-in text-center sm:text-left">
+                <div class="relative mb-4 sm:mb-0 sm:mr-6">
+                    <i class="fas fa-seedling text-farm-green text-3xl sm:text-4xl animate-float"></i>
+                    <div
+                        class="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-farm-accent rounded-full animate-ping-slow">
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold gradient-text leading-tight">
+                        Farm Biodiversity Assistant
+                    </h1>
+                    <div class="flex items-center justify-center sm:justify-start mt-2">
+                        <div
+                            class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-green to-farm-accent rounded-full animate-pulse">
+                        </div>
+                        <i class="fas fa-leaf text-farm-green text-xs mx-2 animate-wiggle"></i>
+                        <div
+                            class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-accent to-farm-green rounded-full animate-pulse">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-gray-700 mt-4 text-base sm:text-lg font-medium animate-fade-in-up">
+                🌱 AI-powered companion planting recommendations for sustainable farming
+            </p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl min-h-screen flex flex-col"></main>
+    <!-- Upload Section -->
+    <div
+        class="glass-effect rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border border-white/30 animate-slide-up hover:shadow-glow transition-all duration-500 hover-lift scroll-reveal flex-1">
+        <div class="text-center mb-6 sm:mb-8 stagger-animation"></div>
+        <div class="relative inline-block">
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-farm-green to-farm-accent rounded-full blur-lg opacity-30 animate-pulse-slow">
+            </div>
+            <div class="relative bg-gradient-to-r from-farm-green to-farm-accent p-3 sm:p-4 rounded-full">
+                <i class="fas fa-camera text-white text-2xl sm:text-3xl lg:text-4xl"></i>
+            </div>
+        </div>
+        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 sm:mb-3 mt-4 sm:mt-6">Upload Your Farm
+            Image</h2>
+        <p class="text-gray-600 text-sm sm:text-base lg:text-lg px-4">Take a photo or upload an image of your farmland
+            to get started</p>
+        <div class="flex items-center justify-center mt-3 sm:mt-4 space-x-1 sm:space-x-2">
+            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-farm-green rounded-full animate-bounce"></div>
+            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-farm-accent rounded-full animate-bounce"
+                style="animation-delay: 0.1s"></div>
+            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-farm-secondary rounded-full animate-bounce"
+                style="animation-delay: 0.2s"></div>
+        </div>
+    </div>
+
+    <form id="uploadForm" class="space-y-6">
+        <!-- Image Upload Area -->
+        <div
+            class="relative border-2 sm:border-3 border-dashed border-farm-green/60 rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 text-center bg-gradient-to-br from-farm-light/20 to-emerald-50/30 hover:from-farm-light/40 hover:to-emerald-50/50 transition-all duration-500 group hover:border-farm-green hover:shadow-glow min-h-[200px] sm:min-h-[250px] flex flex-col justify-center">
+            <input type="file" id="imageInput" accept="image/*" class="hidden">
+            <div id="uploadArea" class="cursor-pointer">
+                <div class="relative">
+                    <div
+                        class="absolute inset-0 bg-farm-green/10 rounded-full blur-xl group-hover:bg-farm-green/20 transition-all duration-500">
+                    </div>
+                    <i
+                        class="fas fa-cloud-upload-alt text-farm-green text-4xl sm:text-5xl lg:text-6xl mb-4 sm:mb-6 relative group-hover:scale-110 transition-transform duration-300"></i>
+                </div>
+                <p
+                    class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3 group-hover:text-farm-dark transition-colors">
+                    Click to upload or drag and drop</p>
+                <p class="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">JPEG, PNG files supported</p>
+                <div
+                    class="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 bg-white/50 rounded-full text-xs sm:text-sm text-gray-600 border border-gray-200">
+                    <i class="fas fa-info-circle mr-1 sm:mr-2 text-farm-green"></i>
+                    Max file size: 10MB
+                </div>
+            </div>
+            <div id="imagePreview" class="hidden animate-scale-in">
+                <div class="relative inline-block">
+                    <img id="previewImg"
+                        class="max-w-full h-48 sm:h-64 lg:h-80 object-cover rounded-xl sm:rounded-2xl mx-auto mb-4 sm:mb-6 shadow-2xl border-2 sm:border-4 border-white">
+                    <div
+                        class="absolute top-1 right-1 sm:top-2 sm:right-2 bg-green-500 text-white p-1.5 sm:p-2 rounded-full">
+                        <i class="fas fa-check text-xs sm:text-sm"></i>
+                    </div>
+                </div>
+                <button type="button" id="changeImage"
+                    class="bg-gradient-to-r from-farm-green to-farm-accent text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-farm-dark hover:to-farm-secondary transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base">
+                    <i class="fas fa-sync-alt mr-1 sm:mr-2"></i>Change Image
+                </button>
+            </div>
+        </div>
+
+        <!-- Camera Button -->
+        <div class="text-center animate-slide-in-left">
+            <button type="button" id="cameraBtn"
+                class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 sm:px-6 lg:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 inline-flex items-center transform hover:scale-105 shadow-lg hover:shadow-xl text-sm sm:text-base w-full sm:w-auto justify-center">
+                <div class="bg-white/20 p-1.5 sm:p-2 rounded-full mr-2 sm:mr-3">
+                    <i class="fas fa-camera text-sm sm:text-lg"></i>
+                </div>
+                <span class="font-semibold">Use Camera</span>
+            </button>
+        </div>
+
+        <!-- Text Input -->
+        <div class="space-y-3 sm:space-y-4 animate-slide-in-right">
+            <label for="textInput" class="block text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-r from-farm-green to-farm-accent p-1.5 sm:p-2 rounded-lg mr-2 sm:mr-3">
+                        <i class="fas fa-edit text-white text-sm sm:text-base"></i>
+                    </div>
+                    <span class="text-base sm:text-xl">Additional Notes</span>
+                </div>
+            </label>
+            <div class="relative">
+                <textarea id="textInput"
+                    placeholder="🌾 Describe any plants you've observed, soil conditions, or other relevant details..."
+                    class="w-full p-4 sm:p-6 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 resize-none h-32 sm:h-40 text-gray-700 bg-white/70 backdrop-blur-sm shadow-inner text-sm sm:text-base"></textarea>
+                <div class="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-gray-400 text-xs sm:text-sm"></div>
+                <i class="fas fa-leaf mr-1"></i>Optional
+            </div>
+        </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center animate-scale-in">
+            <button type="submit" id="analyzeBtn"
+                class="relative bg-gradient-to-r from-farm-green via-farm-accent to-farm-secondary text-white px-6 sm:px-8 lg:px-12 py-3 sm:py-4 lg:py-5 rounded-xl sm:rounded-2xl text-lg sm:text-xl font-bold hover:from-farm-dark hover:via-farm-green hover:to-farm-accent transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-2xl hover:shadow-glow group overflow-hidden w-full sm:w-auto">
+                <div
+                    class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                </div>
+                <div class="relative flex items-center justify-center">
+                    <div
+                        class="bg-white/20 p-1.5 sm:p-2 rounded-full mr-2 sm:mr-3 group-hover:rotate-12 transition-transform duration-300">
+                        <i class="fas fa-search text-sm sm:text-lg"></i>
+                    </div>
+                    <span class="text-base sm:text-lg lg:text-xl">Analyze My Farm</span>
+                    <div class="ml-2 sm:ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right text-sm sm:text-base"></i>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </form>
+    </div>
+
+    <!-- Loading Section -->
+    <div id="loadingSection"
+        class="hidden glass-effect rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 mb-6 sm:mb-8 text-center border border-white/30 animate-fade-in scroll-reveal">
+        <div class="relative mb-6 sm:mb-8">
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-farm-green to-farm-accent rounded-full blur-lg opacity-30 animate-pulse-slow">
+            </div>
+            <div class="relative">
+                <div class="animate-spin rounded-full h-16 w-16 sm:h-20 sm:w-20 border-4 border-transparent bg-gradient-to-r from-farm-green to-farm-accent mx-auto mb-4"
+                    style="background-clip: padding-box; border-image: linear-gradient(45deg, #22c55e, #10b981) 1;">
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fas fa-seedling text-white text-xl sm:text-2xl animate-pulse"></i>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">🔍 Analyzing Your Farm...</h3>
+        <p class="text-gray-600 text-base sm:text-lg mb-4 sm:mb-6 px-4">Our AI is identifying crops and preparing
+            recommendations</p>
+        <div class="flex justify-center space-x-1.5 sm:space-x-2">
+            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-farm-green rounded-full animate-bounce"></div>
+            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-farm-accent rounded-full animate-bounce"
+                style="animation-delay: 0.1s"></div>
+            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-farm-secondary rounded-full animate-bounce"
+                style="animation-delay: 0.2s"></div>
+        </div>
+    </div>
+
+    <!-- Crop Identification Results -->
+    <div id="cropResults"
+        class="hidden glass-effect rounded-3xl shadow-2xl p-8 mb-8 border border-white/30 animate-slide-up">
+        <div class="text-center mb-8">
+            <div class="relative inline-block">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-farm-green to-farm-accent rounded-full blur-lg opacity-30">
+                </div>
+                <div class="relative bg-gradient-to-r from-farm-green to-farm-accent p-4 rounded-full">
+                    <i class="fas fa-leaf text-white text-3xl"></i>
+                </div>
+            </div>
+            <h3 class="text-3xl font-bold text-gray-800 mt-6 mb-3">🌱 Identified Crops</h3>
+            <p class="text-gray-600 text-lg">Please confirm or correct the identified crops below:</p>
+        </div>
+        <div id="cropList" class="space-y-4 mb-8"></div>
+
+        <!-- Add Custom Crop -->
+        <div class="border-t border-gray-200/50 pt-8">
+            <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-plus-circle text-farm-green mr-2"></i>
+                Add Custom Crop
+            </h4>
+            <div class="flex gap-4 mb-6">
+                <div class="flex-1 relative">
+                    <input type="text" id="customCrop" placeholder="🌾 Add a crop not listed above..."
+                        class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 bg-white/70 backdrop-blur-sm">
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                </div>
+                <button id="addCropBtn"
+                    class="bg-gradient-to-r from-farm-green to-farm-accent text-white px-8 py-4 rounded-xl hover:from-farm-dark hover:to-farm-secondary transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-plus mr-2"></i>Add
+                </button>
+            </div>
+        </div>
+
+        <div class="text-center pt-6">
+            <button id="getRecommendations"
+                class="bg-gradient-to-r from-farm-green via-farm-accent to-farm-secondary text-white px-12 py-5 rounded-2xl text-xl font-bold hover:from-farm-dark hover:via-farm-green hover:to-farm-accent transition-all duration-500 transform hover:scale-105 shadow-2xl hover:shadow-glow group relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000">
+                </div>
+                <div class="relative flex items-center justify-center">
+                    <div class="bg-white/20 p-2 rounded-full mr-3">
+                        <i class="fas fa-magic text-lg"></i>
+                    </div>
+                    <span>Get Companion Plant Recommendations</span>
+                    <div class="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Recommendations Section -->
+    <div id="recommendationsSection"
+        class="hidden glass-effect rounded-3xl shadow-2xl p-8 border border-white/30 animate-slide-up">
+        <div class="text-center mb-10">
+            <div class="relative inline-block">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-farm-green to-farm-accent rounded-full blur-xl opacity-40 animate-pulse-slow">
+                </div>
+                <div class="relative bg-gradient-to-r from-farm-green to-farm-accent p-5 rounded-full">
+                    <i class="fas fa-seedling text-white text-4xl"></i>
+                </div>
+            </div>
+            <h3 class="text-4xl font-bold gradient-text mt-6 mb-4">🌿 Recommended Companion Plants</h3>
+            <p class="text-gray-600 text-lg">AI-powered suggestions for your sustainable farming journey</p>
+            <div class="flex items-center justify-center mt-4">
+                <div class="w-16 h-0.5 bg-gradient-to-r from-farm-green to-farm-accent rounded-full"></div>
+                <i class="fas fa-leaf text-farm-green text-sm mx-3"></i>
+                <div class="w-16 h-0.5 bg-gradient-to-r from-farm-accent to-farm-green rounded-full"></div>
+            </div>
+        </div>
+        <div id="recommendationsList" class="space-y-8"></div>
+
+        <!-- Action Buttons -->
+        <div class="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+            <button id="startOver"
+                class="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-8 py-4 rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+                <i class="fas fa-redo mr-3"></i>Start Over
+            </button>
+            <button id="saveResults"
+                class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+                <i class="fas fa-download mr-3"></i>Save Results
+            </button>
+        </div>
+    </div>
+
+    <!-- Error Section -->
+    <div id="errorSection"
+        class="hidden bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200 rounded-2xl p-8 mb-8 animate-scale-in">
+        <div class="flex items-center mb-4">
+            <div class="bg-red-500 p-3 rounded-full mr-4">
+                <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-red-800">Oops! Something went wrong</h3>
+        </div>
+        <p id="errorMessage" class="text-red-700 text-lg mb-6"></p>
+        <button id="retryBtn"
+            class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+            <i class="fas fa-retry mr-2"></i>Try Again
+        </button>
+    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-effect border-t border-white/20 mt-20">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <i class="fas fa-seedling text-farm-green text-2xl mr-3 animate-float"></i>
+                    <span class="text-xl font-bold gradient-text">Farm Biodiversity Assistant</span>
+                </div>
+                <p class="text-gray-600 mb-4">&copy; 2024 Powered by AI for sustainable farming 🌱</p>
+                <div class="flex items-center justify-center space-x-6 text-gray-500">
+                    <div class="flex items-center">
+                        <i class="fas fa-leaf text-farm-green mr-2"></i>
+                        <span>Sustainable</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-brain text-farm-accent mr-2"></i>
+                        <span>AI-Powered</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-heart text-red-400 mr-2"></i>
+                        <span>Eco-Friendly</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

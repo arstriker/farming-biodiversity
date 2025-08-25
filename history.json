@@ -1,0 +1,20 @@
+{
+  "fictional_area_1": {
+    "past_seasons": [
+      {
+        "season": "Spring 2023",
+        "crops": ["Soybeans", "Alfalfa"]
+      },
+      {
+        "season": "Fall 2023",
+        "crops": ["Winter Wheat", "Cover Crop Mix"]
+      },
+      {
+        "season": "Spring 2024",
+        "crops": ["Corn", "Sunflowers"]
+      }
+    ],
+    "soil_type": "Loamy Sand",
+    "notes": "Area is prone to droughts in late summer."
+  }
+}
