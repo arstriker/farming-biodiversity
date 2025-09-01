@@ -32,10 +32,175 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     historical_data = {"history": "Error decoding history.json."}
 
+# --- Plant Database ---
+try:
+    with open('plant_database.json', 'r') as f:
+        plant_database = json.load(f)
+except FileNotFoundError:
+    plant_database = {"plants": {}, "error": "Plant database not found."}
+except json.JSONDecodeError:
+    plant_database = {"plants": {}, "error": "Error decoding plant database."}
+
 @app.route('/')
 def index():
     """Renders the main page."""
     return render_template('index.html')
+
+@app.route('/admin')
+def admin():
+    """Renders the admin interface for managing plant database."""
+    return render_template('admin.html')
+
+@app.route('/api/plants', methods=['GET'])
+def get_plants():
+    """Get all plants from the database."""
+    return jsonify(plant_database)
+
+@app.route('/api/plants/<plant_id>', methods=['GET'])
+def get_plant(plant_id):
+    """Get a specific plant by ID."""
+    if plant_id in plant_database['plants']:
+        return jsonify(plant_database['plants'][plant_id])
+    return jsonify({"error": "Plant not found"}), 404
+
+@app.route('/api/plants/<plant_id>', methods=['PUT'])
+def update_plant(plant_id):
+    """Update a specific plant."""
+    try:
+        data = request.get_json()
+        plant_database['plants'][plant_id] = data
+        
+        # Save to file
+        with open('plant_database.json', 'w') as f:
+            json.dump(plant_database, f, indent=2)
+        
+        return jsonify({"message": "Plant updated successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/plants/<plant_id>', methods=['DELETE'])
+def delete_plant(plant_id):
+    """Delete a specific plant."""
+    try:
+        if plant_id in plant_database['plants']:
+            del plant_database['plants'][plant_id]
+            
+            # Save to file
+            with open('plant_database.json', 'w') as f:
+                json.dump(plant_database, f, indent=2)
+            
+            return jsonify({"message": "Plant deleted successfully"})
+        return jsonify({"error": "Plant not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/plants', methods=['POST'])
+def add_plant():
+    """Add a new plant to the database."""
+    try:
+        data = request.get_json()
+        plant_id = data.get('id', '').lower().replace(' ', '_')
+        
+        if not plant_id:
+            return jsonify({"error": "Plant ID is required"}), 400
+        
+        if plant_id in plant_database['plants']:
+            return jsonify({"error": "Plant already exists"}), 400
+        
+        # Remove the ID from the data before storing
+        plant_data = {k: v for k, v in data.items() if k != 'id'}
+        plant_database['plants'][plant_id] = plant_data
+        
+        # Save to file
+        with open('plant_database.json', 'w') as f:
+            json.dump(plant_database, f, indent=2)
+        
+        return jsonify({"message": "Plant added successfully", "id": plant_id})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/plants/import', methods=['POST'])
+def import_plants():
+    """Import plants database from JSON."""
+    try:
+        data = request.get_json()
+        
+        if not data or 'plants' not in data:
+            return jsonify({"error": "Invalid data format"}), 400
+        
+        # Replace the entire plants database
+        plant_database['plants'] = data['plants']
+        
+        # Save to file
+        with open('plant_database.json', 'w') as f:
+            json.dump(plant_database, f, indent=2)
+        
+        return jsonify({"message": "Database imported successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+def get_companion_recommendations(confirmed_crops):
+    """
+    Get companion plant recommendations based on the plant database
+    """
+    recommendations = []
+    all_companions = set()
+    
+    # Normalize crop names to lowercase for matching
+    normalized_crops = [crop.lower().replace(' ', '_') for crop in confirmed_crops]
+    
+    # Collect all companion plants for the confirmed crops
+    for crop in normalized_crops:
+        if crop in plant_database['plants']:
+            plant_info = plant_database['plants'][crop]
+            companions = plant_info.get('companion_plants', [])
+            all_companions.update(companions)
+    
+    # Remove crops that are already planted
+    all_companions = all_companions - set(normalized_crops)
+    
+    # Create recommendations with detailed information
+    for companion in list(all_companions)[:5]:  # Limit to top 5 recommendations
+        if companion in plant_database['plants']:
+            plant_info = plant_database['plants'][companion]
+            
+            # Build recommendation reason
+            benefits = plant_info.get('benefits_provided', [])
+            harvest_info = plant_info.get('harvest_time', {})
+            soil_info = plant_info.get('soil_requirements', {})
+            
+            reason_parts = []
+            
+            # Add companion benefits
+            if benefits:
+                reason_parts.append(f"Benefits: {', '.join(benefits[:2])}")
+            
+            # Add harvest timing
+            if 'days_to_maturity' in harvest_info:
+                reason_parts.append(f"Harvest in {harvest_info['days_to_maturity']} days")
+            
+            # Add soil compatibility
+            if 'type' in soil_info:
+                soil_types = ', '.join(soil_info['type'])
+                reason_parts.append(f"Thrives in {soil_types} soil")
+            
+            # Add specific companion relationships
+            compatible_with = []
+            for crop in normalized_crops:
+                if crop in plant_database['plants']:
+                    if companion in plant_database['plants'][crop].get('companion_plants', []):
+                        compatible_with.append(plant_database['plants'][crop]['name'])
+            
+            if compatible_with:
+                reason_parts.append(f"Excellent companion for {', '.join(compatible_with[:2])}")
+            
+            recommendation = {
+                'plant': plant_info['name'],
+                'reason': '. '.join(reason_parts) + '.'
+            }
+            recommendations.append(recommendation)
+    
+    return recommendations
 
 def parse_gemini_response_to_json(response_text, expected_keys):
     """
@@ -111,9 +276,6 @@ def analyze():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    if not api_key or api_key == "YOUR_API_KEY_HERE":
-         return jsonify({"error": "API key is not configured on the server."}), 500
-
     data = request.get_json()
     if not data or 'crops' not in data:
         return jsonify({"error": "No confirmed crops provided."}), 400
@@ -121,18 +283,35 @@ def recommend():
     confirmed_crops = data['crops']
     
     try:
+        # First, get recommendations from our plant database
+        database_recommendations = get_companion_recommendations(confirmed_crops)
+        
+        # If we have database recommendations, use them
+        if database_recommendations:
+            return jsonify({"recommendations": database_recommendations})
+        
+        # Fallback to AI if database doesn't have enough info
+        if not api_key or api_key == "YOUR_API_KEY_HERE":
+            return jsonify({"error": "API key is not configured and no database recommendations available."}), 500
+            
         model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # Create the prompt
+        # Enhanced prompt with database context
+        database_info = ""
+        if plant_database.get('plants'):
+            database_info = f"\n**Available Plant Database Info:**\n{json.dumps(plant_database, indent=2)}\n"
+        
         prompt = (
             "You are an expert in agricultural biodiversity, polyculture, and sustainable farming.\n"
             "Based on the following information, recommend a list of compatible companion plants.\n\n"
             "**Current Confirmed Crops:**\n"
             f"- {', '.join(confirmed_crops)}\n\n"
             "**Historical Data for this Farmland Area:**\n"
-            f"{json.dumps(historical_data, indent=2)}\n\n"
+            f"{json.dumps(historical_data, indent=2)}\n"
+            f"{database_info}\n"
             "**Task:**\n"
-            "Provide a list of 3-5 recommended companion plants. For each plant, provide a brief, practical explanation (2-3 sentences) of why it's a good companion, focusing on benefits like pest deterrence, soil health, structural support, or attracting beneficial insects.\n"
+            "Provide a list of 3-5 recommended companion plants. For each plant, provide a brief, practical explanation (2-3 sentences) of why it's a good companion, focusing on benefits like pest deterrence, soil health, structural support, harvest timing, and soil compatibility.\n"
+            "Include specific details about days to maturity, soil requirements, and companion benefits when possible.\n"
             "Format the response as a JSON object with a single key 'recommendations', which is a list of objects. Each object should have two keys: 'plant' (the name of the plant) and 'reason' (the explanation).\n"
             "Example format:\n"
             "```json\n"
@@ -140,7 +319,7 @@ def recommend():
             '  "recommendations": [\n'
             '    {\n'
             '      "plant": "Example Plant",\n'
-            '      "reason": "This is an example reason."\n'
+            '      "reason": "This is an example reason with specific benefits and timing."\n'
             '    }\n'
             '  ]\n'
             '}\n'
@@ -157,8 +336,13 @@ def recommend():
         if recommendations_data:
             return jsonify(recommendations_data)
         else:
-            # Fallback for when JSON parsing fails
-            return jsonify({"error": "Failed to parse the recommendation response from the model. The raw response was: " + response.text}), 500
+            # Final fallback with basic recommendations
+            fallback_recommendations = [
+                {"plant": "Marigold", "reason": "Natural pest deterrent that repels nematodes and attracts beneficial insects. Easy to grow and blooms continuously."},
+                {"plant": "Basil", "reason": "Improves flavor of nearby plants and repels aphids. Harvest in 60 days with continuous picking."},
+                {"plant": "Lettuce", "reason": "Fast-growing ground cover that can be harvested in 45 days. Provides living mulch for taller plants."}
+            ]
+            return jsonify({"recommendations": fallback_recommendations})
 
     except Exception as e:
         print(f"An error occurred during recommendation: {e}")

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Database Admin - Farm Biodiversity Assistant</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #22c55e, #10b981) !important;
+            color: white !important;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+            color: white !important;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            color: white !important;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            color: white !important;
+        }
+        
+        .animated-bg {
+            background: linear-gradient(-45deg, #dcfce7, #f0fdf4, #ecfdf5, #d1fae5);
+            background-size: 400% 400%;
+            animation: gradient-xy 15s ease infinite;
+        }
+        
+        @keyframes gradient-xy {
+            0%, 100% {
+                background-position: left center;
+            }
+            50% {
+                background-position: right center;
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="animated-bg min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect shadow-2xl border-b border-white/20 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-database text-green-600 text-3xl mr-4"></i>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Plant Database Admin</h1>
+                        <p class="text-gray-600">Manage your companion planting database</p>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/" class="btn-secondary px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center">
+                        <i class="fas fa-home mr-2"></i>Back to App
+                    </a>
+                    <button id="addPlantBtn" class="btn-primary px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center">
+                        <i class="fas fa-plus mr-2"></i>Add Plant
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Search and Filter -->
+        <div class="glass-effect rounded-2xl p-6 mb-8 border border-white/30">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-1">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchInput" placeholder="Search plants..." 
+                               class="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300">
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button id="exportBtn" class="btn-warning px-4 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                    <button id="importBtn" class="btn-secondary px-4 py-3 rounded-lg hover:opacity-90 transition-all duration-300 flex items-center">
+                        <i class="fas fa-upload mr-2"></i>Import
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plants Grid -->
+        <div id="plantsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Plants will be loaded here -->
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+            <p class="mt-4 text-gray-600">Loading plants...</p>
+        </div>
+    </main>
+
+    <!-- Add/Edit Plant Modal -->
+    <div id="plantModal" class="modal">
+        <div class="glass-effect rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-white/30">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold text-gray-800">Add New Plant</h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="plantForm" class="space-y-6">
+                <input type="hidden" id="plantId" name="plantId">
+                
+                <!-- Basic Information -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-info-circle text-green-600 mr-2"></i>Basic Information
+                    </h3>
+                    <div class="form-grid">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Plant Name *</label>
+                            <input type="text" id="plantName" name="name" required
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Scientific Name</label>
+                            <input type="text" id="scientificName" name="scientific_name"
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Companion Plants -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-handshake text-green-600 mr-2"></i>Companion Plants
+                    </h3>
+                    <div class="form-grid">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Companion Plants (comma-separated)</label>
+                            <textarea id="companionPlants" name="companion_plants" rows="3"
+                                      placeholder="basil, marigold, carrots, lettuce"
+                                      class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Antagonistic Plants (comma-separated)</label>
+                            <textarea id="antagonisticPlants" name="antagonistic_plants" rows="3"
+                                      placeholder="fennel, corn, brassicas"
+                                      class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soil Requirements -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-mountain text-green-600 mr-2"></i>Soil Requirements
+                    </h3>
+                    <div class="form-grid">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Soil Types (comma-separated)</label>
+                            <input type="text" id="soilTypes" name="soil_types"
+                                   placeholder="loamy, well-draining"
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">pH Range (min-max)</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="phMin" name="ph_min" step="0.1" placeholder="6.0"
+                                       class="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <span class="flex items-center text-gray-500">-</span>
+                                <input type="number" id="phMax" name="ph_max" step="0.1" placeholder="7.0"
+                                       class="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fertility Level</label>
+                            <select id="fertility" name="fertility"
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <option value="">Select fertility level</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Drainage</label>
+                            <select id="drainage" name="drainage"
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <option value="">Select drainage</option>
+                                <option value="poor">Poor</option>
+                                <option value="good">Good</option>
+                                <option value="excellent">Excellent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Growing Conditions -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-sun text-green-600 mr-2"></i>Growing Conditions
+                    </h3>
+                    <div class="form-grid">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sunlight Requirements</label>
+                            <select id="sunlight" name="sunlight"
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <option value="">Select sunlight needs</option>
+                                <option value="full sun">Full Sun</option>
+                                <option value="partial shade">Partial Shade</option>
+                                <option value="full shade">Full Shade</option>
+                                <option value="full sun to partial shade">Full Sun to Partial Shade</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Water Needs</label>
+                            <select id="waterNeeds" name="water_needs"
+                                    class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <option value="">Select water needs</option>
+                                <option value="low">Low</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="high">High</option>
+                                <option value="moderate to high">Moderate to High</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Temperature Range (°F)</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="tempMin" name="temp_min" placeholder="65"
+                                       class="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                                <span class="flex items-center text-gray-500">-</span>
+                                <input type="number" id="tempMax" name="temp_max" placeholder="85"
+                                       class="flex-1 p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Harvest Information -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-calendar text-green-600 mr-2"></i>Harvest Information
+                    </h3>
+                    <div class="form-grid">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Days to Maturity</label>
+                            <input type="number" id="daysToMaturity" name="days_to_maturity"
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Season</label>
+                            <input type="text" id="season" name="season" placeholder="summer, spring and fall"
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Yield Duration</label>
+                            <input type="text" id="yieldDuration" name="yield_duration" placeholder="continuous harvest for 2-3 months"
+                                   class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefits -->
+                <div class="bg-white/50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-star text-green-600 mr-2"></i>Benefits Provided
+                    </h3>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Benefits (comma-separated)</label>
+                        <textarea id="benefits" name="benefits" rows="3"
+                                  placeholder="attracts beneficial insects, repels pests, improves soil"
+                                  class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-4 focus:ring-green-500/20 focus:border-green-500"></textarea>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <button type="button" id="cancelBtn" class="btn-secondary px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-primary px-6 py-3 rounded-lg hover:opacity-90 transition-all duration-300">
+                        <i class="fas fa-save mr-2"></i>Save Plant
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

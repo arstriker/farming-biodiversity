@@ -1,0 +1,778 @@
+{
+  "plants": {
+    "tomato": {
+      "name": "Tomato",
+      "scientific_name": "Solanum lycopersicum",
+      "companion_plants": [
+        "basil",
+        "oregano",
+        "parsley",
+        "marigold",
+        "nasturtium",
+        "carrots",
+        "lettuce",
+        "spinach",
+        "onions",
+        "garlic",
+        "chives"
+      ],
+      "antagonistic_plants": [
+        "fennel",
+        "corn",
+        "brassicas",
+        "walnut"
+      ],
+      "soil_requirements": {
+        "type": [
+          "loamy",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          6.8
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "moderate to high",
+        "temperature_range": [
+          65,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 75,
+        "season": "summer to fall",
+        "yield_duration": "continuous for 2-3 months"
+      },
+      "benefits_provided": [
+        "attracts beneficial insects",
+        "provides shade for smaller plants"
+      ]
+    },
+    "basil": {
+      "name": "Basil",
+      "scientific_name": "Ocimum basilicum",
+      "companion_plants": [
+        "tomato",
+        "pepper",
+        "oregano",
+        "lettuce",
+        "spinach",
+        "beans"
+      ],
+      "antagonistic_plants": [
+        "rue",
+        "sage"
+      ],
+      "soil_requirements": {
+        "type": [
+          "well-draining",
+          "fertile"
+        ],
+        "ph_range": [
+          6.0,
+          7.5
+        ],
+        "fertility": "medium to high",
+        "drainage": "excellent"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "moderate",
+        "temperature_range": [
+          70,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 60,
+        "season": "summer",
+        "yield_duration": "continuous harvest for 3-4 months"
+      },
+      "benefits_provided": [
+        "repels aphids and tomato hornworms",
+        "improves flavor of companion plants",
+        "attracts pollinators"
+      ]
+    },
+    "carrot": {
+      "name": "Carrot",
+      "scientific_name": "Daucus carota",
+      "companion_plants": [
+        "tomato",
+        "lettuce",
+        "onions",
+        "leeks",
+        "chives",
+        "rosemary",
+        "sage",
+        "peas"
+      ],
+      "antagonistic_plants": [
+        "dill",
+        "parsnip",
+        "fennel"
+      ],
+      "soil_requirements": {
+        "type": [
+          "sandy",
+          "loose",
+          "deep"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "medium",
+        "drainage": "excellent"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun to partial shade",
+        "water_needs": "moderate",
+        "temperature_range": [
+          55,
+          75
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 70,
+        "season": "fall",
+        "yield_duration": "single harvest"
+      },
+      "benefits_provided": [
+        "breaks up soil for other plants",
+        "attracts beneficial insects"
+      ]
+    },
+    "lettuce": {
+      "name": "Lettuce",
+      "scientific_name": "Lactuca sativa",
+      "companion_plants": [
+        "tomato",
+        "carrots",
+        "radish",
+        "onions",
+        "garlic",
+        "chives",
+        "beans",
+        "peas"
+      ],
+      "antagonistic_plants": [
+        "broccoli",
+        "sunflower"
+      ],
+      "soil_requirements": {
+        "type": [
+          "loamy",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "partial shade to full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          45,
+          65
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 45,
+        "season": "spring and fall",
+        "yield_duration": "continuous harvest for 6-8 weeks"
+      },
+      "benefits_provided": [
+        "provides ground cover",
+        "quick growing space filler"
+      ]
+    },
+    "onion": {
+      "name": "Onion",
+      "scientific_name": "Allium cepa",
+      "companion_plants": [
+        "tomato",
+        "carrots",
+        "lettuce",
+        "cabbage",
+        "broccoli",
+        "peppers",
+        "strawberries"
+      ],
+      "antagonistic_plants": [
+        "beans",
+        "peas",
+        "asparagus"
+      ],
+      "soil_requirements": {
+        "type": [
+          "well-draining",
+          "fertile"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "medium to high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "moderate",
+        "temperature_range": [
+          55,
+          75
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 100,
+        "season": "summer to fall",
+        "yield_duration": "single harvest"
+      },
+      "benefits_provided": [
+        "repels many pests",
+        "natural fungicide properties",
+        "deters aphids and carrot flies"
+      ]
+    },
+    "marigold": {
+      "name": "Marigold",
+      "scientific_name": "Tagetes patula",
+      "companion_plants": [
+        "tomato",
+        "peppers",
+        "eggplant",
+        "beans",
+        "squash",
+        "cucumber"
+      ],
+      "antagonistic_plants": [],
+      "soil_requirements": {
+        "type": [
+          "well-draining",
+          "average"
+        ],
+        "ph_range": [
+          6.0,
+          7.5
+        ],
+        "fertility": "low to medium",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "low to moderate",
+        "temperature_range": [
+          65,
+          80
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 50,
+        "season": "summer to frost",
+        "yield_duration": "continuous blooming"
+      },
+      "benefits_provided": [
+        "repels nematodes",
+        "deters aphids and whiteflies",
+        "attracts beneficial insects",
+        "natural pest control"
+      ]
+    },
+    "beans": {
+      "name": "Beans",
+      "scientific_name": "Phaseolus vulgaris",
+      "companion_plants": [
+        "corn",
+        "squash",
+        "carrots",
+        "lettuce",
+        "spinach",
+        "radish",
+        "marigold"
+      ],
+      "antagonistic_plants": [
+        "onions",
+        "garlic",
+        "fennel",
+        "sunflower"
+      ],
+      "soil_requirements": {
+        "type": [
+          "well-draining",
+          "fertile"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "medium",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "moderate",
+        "temperature_range": [
+          65,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 55,
+        "season": "summer",
+        "yield_duration": "continuous harvest for 6-8 weeks"
+      },
+      "benefits_provided": [
+        "fixes nitrogen in soil",
+        "improves soil fertility",
+        "provides vertical structure"
+      ]
+    },
+    "corn": {
+      "name": "Corn",
+      "scientific_name": "Zea mays",
+      "companion_plants": [
+        "beans",
+        "squash",
+        "pumpkin",
+        "sunflower",
+        "dill",
+        "parsley"
+      ],
+      "antagonistic_plants": [
+        "tomato",
+        "fennel"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          6.8
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          70,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 90,
+        "season": "late summer",
+        "yield_duration": "single harvest"
+      },
+      "benefits_provided": [
+        "provides support for climbing plants",
+        "creates windbreak",
+        "tall structure for garden design"
+      ]
+    },
+    "squash": {
+      "name": "Squash",
+      "scientific_name": "Cucurbita pepo",
+      "companion_plants": [
+        "corn",
+        "beans",
+        "radish",
+        "nasturtium",
+        "marigold",
+        "sunflower"
+      ],
+      "antagonistic_plants": [
+        "potato"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          70,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 50,
+        "season": "summer to fall",
+        "yield_duration": "continuous harvest for 8-10 weeks"
+      },
+      "benefits_provided": [
+        "provides ground cover",
+        "suppresses weeds",
+        "retains soil moisture"
+      ]
+    },
+    "pepper": {
+      "name": "Pepper",
+      "scientific_name": "Capsicum annuum",
+      "companion_plants": [
+        "tomato",
+        "basil",
+        "oregano",
+        "onions",
+        "carrots",
+        "spinach",
+        "lettuce"
+      ],
+      "antagonistic_plants": [
+        "fennel",
+        "beans"
+      ],
+      "soil_requirements": {
+        "type": [
+          "well-draining",
+          "fertile"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "high",
+        "drainage": "excellent"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "moderate",
+        "temperature_range": [
+          70,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 70,
+        "season": "summer to fall",
+        "yield_duration": "continuous harvest for 2-3 months"
+      },
+      "benefits_provided": [
+        "attracts beneficial insects",
+        "compact growth habit"
+      ]
+    },
+    "cucumber": {
+      "name": "Cucumber",
+      "scientific_name": "Cucumis sativus",
+      "companion_plants": [
+        "beans",
+        "corn",
+        "radish",
+        "lettuce",
+        "spinach",
+        "marigold",
+        "nasturtium"
+      ],
+      "antagonistic_plants": [
+        "aromatic herbs",
+        "potato"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          70,
+          85
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 55,
+        "season": "summer",
+        "yield_duration": "continuous harvest for 6-8 weeks"
+      },
+      "benefits_provided": [
+        "ground cover",
+        "attracts pollinators"
+      ]
+    },
+    "spinach": {
+      "name": "Spinach",
+      "scientific_name": "Spinacia oleracea",
+      "companion_plants": [
+        "lettuce",
+        "carrots",
+        "radish",
+        "onions",
+        "garlic",
+        "beans",
+        "peas"
+      ],
+      "antagonistic_plants": [
+        "fennel"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.5,
+          7.5
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "partial shade to full sun",
+        "water_needs": "moderate to high",
+        "temperature_range": [
+          50,
+          70
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 40,
+        "season": "spring and fall",
+        "yield_duration": "continuous harvest for 4-6 weeks"
+      },
+      "benefits_provided": [
+        "quick growing ground cover",
+        "cool season crop"
+      ]
+    },
+    "radish": {
+      "name": "Radish",
+      "scientific_name": "Raphanus sativus",
+      "companion_plants": [
+        "carrots",
+        "lettuce",
+        "spinach",
+        "beans",
+        "peas",
+        "cucumber",
+        "squash"
+      ],
+      "antagonistic_plants": [
+        "hyssop"
+      ],
+      "soil_requirements": {
+        "type": [
+          "loose",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "medium",
+        "drainage": "excellent"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun to partial shade",
+        "water_needs": "moderate",
+        "temperature_range": [
+          50,
+          70
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 25,
+        "season": "spring and fall",
+        "yield_duration": "single harvest"
+      },
+      "benefits_provided": [
+        "breaks up soil",
+        "fast growing space filler",
+        "pest deterrent"
+      ]
+    },
+    "broccoli": {
+      "name": "Broccoli",
+      "scientific_name": "Brassica oleracea",
+      "companion_plants": [
+        "onions",
+        "garlic",
+        "lettuce",
+        "spinach",
+        "carrots",
+        "beans",
+        "peas"
+      ],
+      "antagonistic_plants": [
+        "tomato",
+        "pepper",
+        "strawberry"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.0
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          60,
+          70
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 70,
+        "season": "spring and fall",
+        "yield_duration": "single harvest with side shoots"
+      },
+      "benefits_provided": [
+        "attracts beneficial insects",
+        "cool season crop"
+      ]
+    },
+    "cabbage": {
+      "name": "Cabbage",
+      "scientific_name": "Brassica oleracea",
+      "companion_plants": [
+        "onions",
+        "garlic",
+        "lettuce",
+        "spinach",
+        "carrots",
+        "beans",
+        "dill"
+      ],
+      "antagonistic_plants": [
+        "tomato",
+        "pepper",
+        "strawberry"
+      ],
+      "soil_requirements": {
+        "type": [
+          "fertile",
+          "well-draining"
+        ],
+        "ph_range": [
+          6.0,
+          7.5
+        ],
+        "fertility": "high",
+        "drainage": "good"
+      },
+      "growing_conditions": {
+        "sunlight": "full sun",
+        "water_needs": "high",
+        "temperature_range": [
+          60,
+          70
+        ]
+      },
+      "harvest_time": {
+        "days_to_maturity": 80,
+        "season": "spring and fall",
+        "yield_duration": "single harvest"
+      },
+      "benefits_provided": [
+        "large leaves provide shade",
+        "cool season crop"
+      ]
+    }
+  },
+  "soil_types": {
+    "sandy": {
+      "description": "Fast-draining, warms quickly, low nutrient retention",
+      "best_for": [
+        "carrots",
+        "radish",
+        "herbs"
+      ],
+      "improvements": [
+        "add compost",
+        "mulch heavily"
+      ]
+    },
+    "clay": {
+      "description": "Slow-draining, nutrient-rich, compacts easily",
+      "best_for": [
+        "beans",
+        "squash",
+        "cabbage"
+      ],
+      "improvements": [
+        "add organic matter",
+        "create raised beds"
+      ]
+    },
+    "loamy": {
+      "description": "Well-balanced, ideal for most crops",
+      "best_for": [
+        "tomato",
+        "lettuce",
+        "pepper",
+        "cucumber"
+      ],
+      "improvements": [
+        "maintain with compost"
+      ]
+    },
+    "well-draining": {
+      "description": "Good water movement, prevents root rot",
+      "best_for": [
+        "most vegetables",
+        "herbs"
+      ],
+      "improvements": [
+        "add perlite or sand if needed"
+      ]
+    }
+  },
+  "companion_benefits": {
+    "pest_control": [
+      "marigold repels nematodes",
+      "basil repels aphids and flies",
+      "onions deter many insects",
+      "nasturtium traps aphids"
+    ],
+    "soil_improvement": [
+      "beans fix nitrogen",
+      "deep-rooted plants break up soil",
+      "ground covers prevent erosion"
+    ],
+    "space_utilization": [
+      "vertical growing with corn and beans",
+      "ground cover with squash",
+      "succession planting with quick crops"
+    ],
+    "pollinator_attraction": [
+      "marigold attracts beneficial insects",
+      "herbs attract pollinators",
+      "diverse flowers support ecosystem"
+    ]
+  }
+}
