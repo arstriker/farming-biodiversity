@@ -11,8 +11,10 @@ A comprehensive, modern web application that helps farmers increase biodiversity
 - 🤖 **AI Crop Identification** - Powered by Google's Gemini API for accurate plant recognition and analysis
 - 🌿 **Smart Companion Plant Recommendations** - Intelligent suggestions combining database lookup with AI insights
 - 📊 **Comprehensive Plant Database** - 15+ pre-loaded crops with detailed companion relationships, soil requirements, and harvest timing
+- 📖 **Farming Diary** - Complete crop tracking system with entry management, photo uploads, filtering, and progress monitoring
 - 🛠️ **Admin Interface** - Complete CRUD operations for plant database management with search, import/export functionality
 - 🎯 **Biodiversity Analysis** - Evaluate current farm setup and suggest improvements for ecosystem health
+- 📍 **GPS Location Integration** - Precise location detection for climate-aware recommendations and regional optimization
 
 ### 🎨 **User Experience**
 - 📱 **Mobile-First Design** - Fully responsive with modern animations
@@ -24,6 +26,7 @@ A comprehensive, modern web application that helps farmers increase biodiversity
 ### 💾 **Data Management**
 - 💾 **Export/Import Database** - Backup and restore plant database with full JSON support
 - 📄 **Export Results** - Save AI recommendations and analysis as downloadable JSON files
+- 📖 **Diary Data Management** - Comprehensive entry tracking with backup, recovery, and data validation
 - 🌍 **Historical Data Integration** - Consider past planting patterns and local farming history
 - 🔄 **Real-time Updates** - Changes reflect immediately across the app without page refresh
 - 🔍 **Advanced Search** - Find plants instantly with real-time filtering and search
@@ -72,6 +75,7 @@ A comprehensive, modern web application that helps farmers increase biodiversity
 
 6. **Open your browser**
    - Main App: `http://localhost:5000`
+   - Farming Diary: `http://localhost:5000/diary`
    - Admin Panel: `http://localhost:5000/admin`
 
 ## 🛠️ Technology Stack
@@ -105,21 +109,38 @@ farming-biodiversity/
 ├── app.py                    # Flask application with API routes
 ├── requirements.txt          # Python dependencies
 ├── plant_database.json       # Comprehensive plant database
+├── diary_data.json          # Farming diary entries database
 ├── .env                     # Environment variables (create this)
 ├── .gitignore              # Git ignore rules
 ├── history.json            # Historical farming data
 ├── templates/
 │   ├── index.html          # Main application interface
+│   ├── diary.html          # Farming diary interface
 │   └── admin.html          # Database management interface
 ├── static/
+│   ├── css/
+│   │   └── diary.css       # Diary-specific styling
 │   └── js/
 │       ├── app.js          # Main app JavaScript
+│       ├── diary.js        # Diary functionality
 │       └── admin.js        # Admin interface JavaScript
 └── .kiro/
     └── specs/              # Project specifications
 ```
 
 ## 🎯 How It Works
+
+### 📖 **Farming Diary Features**
+The integrated farming diary provides comprehensive crop tracking and management:
+
+1. **Entry Creation** - Document daily farming activities with detailed forms
+2. **Crop Tracking** - Monitor growth stages from seed to harvest
+3. **Photo Documentation** - Upload images to create visual progress records
+4. **Activity Logging** - Track watering, fertilizing, pest control, and other activities
+5. **Weather Integration** - Record weather conditions affecting crop growth
+6. **Search & Filter** - Find specific entries by crop type, growth stage, or date
+7. **Data Export** - Export diary data for backup and analysis
+8. **Performance Optimization** - Pagination and caching for large datasets
 
 ### 🌾 **Main Application Flow**
 1. **Upload Image** - Users upload a photo of their farmland or use device camera
@@ -166,7 +187,7 @@ farming-biodiversity/
 
 ## 🔌 API Endpoints
 
-The application provides a RESTful API for plant database management:
+The application provides a RESTful API for plant database and diary management:
 
 ### Plant Management
 - `GET /api/plants` - Retrieve all plants
@@ -176,8 +197,18 @@ The application provides a RESTful API for plant database management:
 - `DELETE /api/plants/<id>` - Remove plant from database
 - `POST /api/plants/import` - Import entire database from JSON
 
+### Diary Management
+- `GET /api/diary/entries` - Retrieve diary entries with pagination and filtering
+- `POST /api/diary/entries` - Create new diary entry
+- `GET /api/diary/entries/<id>` - Get specific diary entry
+- `PUT /api/diary/entries/<id>` - Update existing diary entry
+- `DELETE /api/diary/entries/<id>` - Delete diary entry
+- `GET /api/diary/categories` - Get crop categories and growth stages
+- `POST /api/diary/upload` - Upload photos for diary entries
+
 ### Application Routes
 - `GET /` - Main application interface
+- `GET /diary` - Farming diary interface
 - `GET /admin` - Database management interface
 - `POST /analyze` - AI-powered crop identification
 - `POST /recommend` - Get companion plant recommendations

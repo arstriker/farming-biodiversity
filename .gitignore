@@ -101,3 +101,6 @@ node_modules/
 
 # DynamoDB Local files
 .dynamodb/
+
+# User data files (contains potentially sensitive information)
+user_data.json

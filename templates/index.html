@@ -148,6 +148,57 @@
             opacity: 1 !important;
         }
 
+        .diary-nav-btn {
+            background: linear-gradient(135deg, #22c55e, #10b981) !important;
+            color: white !important;
+            opacity: 1 !important;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diary-nav-btn:hover {
+            background: linear-gradient(135deg, #166534, #059669) !important;
+            text-decoration: none;
+        }
+
+        .diary-nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .diary-nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .help-button {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .help-button::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            opacity: 0.8;
+        }
+
+        .help-button:hover::after {
+            opacity: 0;
+        }
+
         .gradient-text {
             background: linear-gradient(135deg, #22c55e, #10b981);
             -webkit-background-clip: text;
@@ -375,29 +426,55 @@
     
     <!-- Header -->
     <header class="glass-effect shadow-2xl border-b border-white/20 sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-            <div class="flex flex-col sm:flex-row items-center justify-center animate-fade-in text-center sm:text-left">
-                <div class="relative mb-4 sm:mb-0 sm:mr-6">
-                    <div class="pulse-ring w-12 h-12 sm:w-16 sm:h-16"></div>
-                    <div class="pulse-ring w-12 h-12 sm:w-16 sm:h-16" style="animation-delay: 1s;"></div>
-                    <i class="fas fa-seedling text-farm-green text-3xl sm:text-4xl animate-float bouncing-icon relative z-10"></i>
-                    <div
-                        class="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-farm-accent rounded-full animate-ping-slow">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between animate-fade-in">
+                <!-- Logo and Title Section -->
+                <div class="flex items-center text-center sm:text-left mb-4 sm:mb-0">
+                    <div class="relative mr-4 sm:mr-6">
+                        <div class="pulse-ring w-12 h-12 sm:w-16 sm:h-16"></div>
+                        <div class="pulse-ring w-12 h-12 sm:w-16 sm:h-16" style="animation-delay: 1s;"></div>
+                        <i class="fas fa-seedling text-farm-green text-3xl sm:text-4xl animate-float bouncing-icon relative z-10"></i>
+                        <div
+                            class="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-farm-accent rounded-full animate-ping-slow">
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-shimmer leading-tight">
+                            Farm Biodiversity Assistant
+                        </h1>
+                        <div class="flex items-center justify-center sm:justify-start mt-2">
+                            <div
+                                class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-green to-farm-accent rounded-full animate-pulse">
+                            </div>
+                            <i class="fas fa-leaf text-farm-green text-xs mx-2 animate-wiggle"></i>
+                            <div
+                                class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-accent to-farm-green rounded-full animate-pulse">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1">
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-shimmer leading-tight">
-                        Farm Biodiversity Assistant
-                    </h1>
-                    <div class="flex items-center justify-center sm:justify-start mt-2">
-                        <div
-                            class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-green to-farm-accent rounded-full animate-pulse">
+                
+                <!-- Navigation Section -->
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <!-- Help Button -->
+                    <button onclick="showHelpModal()" 
+                            class="help-button bg-white/20 hover:bg-white/30 text-gray-700 hover:text-farm-green px-3 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg inline-flex items-center group"
+                            title="Get help and learn about features">
+                        <i class="fas fa-question-circle text-sm sm:text-base"></i>
+                        <span class="hidden sm:inline ml-2 font-medium text-sm">Help</span>
+                    </button>
+                    
+                    <!-- Farming Diary Button -->
+                    <a href="/diary" 
+                       class="diary-nav-btn bg-gradient-to-r from-farm-green to-farm-accent text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl hover:from-farm-dark hover:to-farm-secondary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center group">
+                        <div class="bg-white/20 p-1.5 sm:p-2 rounded-full mr-2 sm:mr-3 group-hover:bg-white/30 transition-all duration-300">
+                            <i class="fas fa-book text-sm sm:text-base"></i>
                         </div>
-                        <i class="fas fa-leaf text-farm-green text-xs mx-2 animate-wiggle"></i>
-                        <div
-                            class="w-8 sm:w-12 h-0.5 bg-gradient-to-r from-farm-accent to-farm-green rounded-full animate-pulse">
+                        <span class="font-semibold text-sm sm:text-base">Farming Diary</span>
+                        <div class="ml-2 bg-white/20 px-2 py-1 rounded-full text-xs font-medium">
+                            New!
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             <p class="text-center text-gray-700 mt-4 text-base sm:text-lg font-medium animate-fade-in-up">
@@ -406,10 +483,34 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-4 max-w-7xl">
+    <!-- Quick Access Menu -->
+    <div class="bg-white/30 backdrop-blur-sm border-b border-gray-200/30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <div class="flex items-center justify-center space-x-6 text-sm">
+                <div class="flex items-center text-gray-600">
+                    <i class="fas fa-seedling text-farm-green mr-2"></i>
+                    <span class="font-medium">Quick Access:</span>
+                </div>
+                <a href="/diary" class="text-gray-600 hover:text-farm-green transition-colors flex items-center">
+                    <i class="fas fa-book mr-1"></i>
+                    Diary
+                </a>
+                <a href="/admin" class="text-gray-600 hover:text-farm-green transition-colors flex items-center">
+                    <i class="fas fa-cog mr-1"></i>
+                    Admin
+                </a>
+                <button onclick="showHelpModal()" class="text-gray-600 hover:text-farm-green transition-colors flex items-center">
+                    <i class="fas fa-question-circle mr-1"></i>
+                    Help
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2 max-w-7xl">
     <!-- Upload Section -->
     <div
-        class="glass-effect rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 border border-white/30 animate-slide-up interactive-glow transition-all duration-500 hover-lift scroll-reveal morphing-blob">
+        class="glass-effect rounded-2xl sm:rounded-3xl shadow-2xl p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 border border-white/30 animate-slide-up interactive-glow transition-all duration-500 hover-lift scroll-reveal morphing-blob">
         <div class="text-center mb-6 sm:mb-8 stagger-animation"></div>
         <div class="relative inline-block">
             <div
@@ -419,7 +520,7 @@
                 <i class="fas fa-camera text-white text-2xl sm:text-3xl lg:text-4xl bouncing-icon"></i>
             </div>
         </div>
-        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 sm:mb-3 mt-4 sm:mt-6">Upload Your Farm
+        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-1 sm:mb-2 mt-2 sm:mt-3">Upload Your Farm
             Image</h2>
         <p class="text-gray-600 text-sm sm:text-base lg:text-lg px-4">Take a photo or upload an image of your farmland
             to get started</p>
@@ -432,7 +533,7 @@
         </div>
     </div>
 
-    <form id="uploadForm" class="space-y-6">
+    <form id="uploadForm" class="space-y-4 sm:space-y-5">
         <!-- Image Upload Area -->
         <div
             class="relative border-2 sm:border-3 border-dashed border-farm-green/60 rounded-xl sm:rounded-2xl p-6 sm:p-8 lg:p-12 text-center bg-gradient-to-br from-farm-light/20 to-emerald-50/30 hover:from-farm-light/40 hover:to-emerald-50/50 transition-all duration-500 group hover:border-farm-green hover:shadow-glow min-h-[200px] sm:min-h-[250px] flex flex-col justify-center">
@@ -496,13 +597,140 @@
                 <textarea id="textInput"
                     placeholder="🌾 Describe any plants you've observed, soil conditions, or other relevant details..."
                     class="w-full p-4 sm:p-6 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 resize-none h-32 sm:h-40 text-gray-700 bg-white/70 backdrop-blur-sm shadow-inner text-sm sm:text-base"></textarea>
-                <div class="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-gray-400 text-xs sm:text-sm"></div>
-                <i class="fas fa-leaf mr-1"></i>Optional
+                <div class="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-gray-400 text-xs sm:text-sm">
+                    <i class="fas fa-leaf mr-1"></i>Optional
+                </div>
+            </div>
+        </div>
+
+        <!-- Soil & Location Information -->
+        <div class="glass-effect rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/30 animate-fade-in-up">
+            <div class="mb-3 sm:mb-4">
+                <div class="flex items-center mb-3 sm:mb-4">
+                    <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-1.5 sm:p-2 rounded-lg mr-2 sm:mr-3">
+                        <i class="fas fa-mountain text-white text-sm sm:text-base"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800">Soil & Location Details</h3>
+                    <span class="ml-2 text-xs sm:text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">Optional</span>
+                </div>
+                <p class="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">Help us provide more accurate recommendations by sharing your soil and location information</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+                <!-- Soil Type -->
+                <div class="space-y-2 sm:space-y-3">
+                    <label for="soilType" class="block text-sm sm:text-base font-semibold text-gray-700">
+                        <i class="fas fa-layer-group text-amber-600 mr-1 sm:mr-2"></i>Soil Type
+                    </label>
+                    <select id="soilType" 
+                        class="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 bg-white/70 backdrop-blur-sm text-sm sm:text-base">
+                        <option value="">Select soil type...</option>
+                        <option value="clay">Clay</option>
+                        <option value="sandy">Sandy</option>
+                        <option value="loamy">Loamy</option>
+                        <option value="silty">Silty</option>
+                        <option value="peaty">Peaty</option>
+                        <option value="chalky">Chalky</option>
+                        <option value="mixed">Mixed</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <!-- Soil pH -->
+                <div class="space-y-2 sm:space-y-3">
+                    <label for="soilPH" class="block text-sm sm:text-base font-semibold text-gray-700">
+                        <i class="fas fa-flask text-blue-600 mr-1 sm:mr-2"></i>Soil pH
+                    </label>
+                    <div class="relative">
+                        <input type="number" id="soilPH" step="0.1" min="3.0" max="10.0" 
+                            placeholder="e.g., 6.5"
+                            class="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 bg-white/70 backdrop-blur-sm text-sm sm:text-base">
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs sm:text-sm">
+                            pH
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-500 flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Range: 3.0 - 10.0
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="space-y-2 sm:space-y-3">
+                    <label for="location" class="block text-sm sm:text-base font-semibold text-gray-700">
+                        <i class="fas fa-map-marker-alt text-green-600 mr-1 sm:mr-2"></i>Location
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="location" 
+                            placeholder="City, State/Country"
+                            class="w-full p-3 sm:p-4 pr-12 border-2 border-gray-200 rounded-lg sm:rounded-xl focus:ring-4 focus:ring-farm-green/20 focus:border-farm-green transition-all duration-300 bg-white/70 backdrop-blur-sm text-sm sm:text-base">
+                        <button type="button" id="getLocationBtn" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-md"
+                            title="Get current GPS location">
+                            <i class="fas fa-crosshairs text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="text-xs text-gray-500 flex items-center justify-between">
+                        <span>
+                            <i class="fas fa-globe mr-1"></i>
+                            e.g., Austin, Texas
+                        </span>
+                        <span class="text-blue-600">
+                            <i class="fas fa-satellite mr-1"></i>
+                            Click GPS button for precise location
+                        </span>
+                    </div>
+                    
+                    <!-- GPS Status Display -->
+                    <div id="gpsStatus" class="hidden">
+                        <div class="flex items-center p-2 rounded-lg text-xs">
+                            <i class="fas fa-spinner fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-blue-600">Getting your location...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- GPS Coordinates Display -->
+                    <div id="gpsCoordinates" class="hidden">
+                        <div class="bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg border border-green-200/50">
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs text-gray-700">
+                                    <i class="fas fa-map-pin text-green-600 mr-1"></i>
+                                    <strong>GPS Location:</strong>
+                                    <span id="coordinatesText"></span>
+                                </div>
+                                <button type="button" id="clearGpsBtn" 
+                                    class="text-red-500 hover:text-red-700 transition-colors"
+                                    title="Clear GPS location">
+                                    <i class="fas fa-times text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Accurate location helps provide better regional recommendations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soil pH Helper -->
+            <div class="mt-3 sm:mt-4 p-2 sm:p-3 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200/50">
+                <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2 mt-1 flex-shrink-0"></i>
+                    <div class="text-xs sm:text-sm text-gray-700">
+                        <strong>pH Guide:</strong> 
+                        <span class="text-red-600">Acidic (3-6)</span> • 
+                        <span class="text-green-600">Neutral (6-7)</span> • 
+                        <span class="text-blue-600">Alkaline (7-10)</span>
+                        <br>
+                        <span class="text-gray-600">Most crops prefer slightly acidic to neutral soil (6.0-7.0)</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="text-center animate-scale-in">
+        <div class="text-center animate-scale-in mt-6 sm:mt-8 lg:mt-10">
             <button type="submit" id="analyzeBtn"
                 class="btn-primary relative bg-gradient-to-r from-farm-green via-farm-accent to-farm-secondary text-white px-6 sm:px-8 lg:px-12 py-3 sm:py-4 lg:py-5 rounded-xl sm:rounded-2xl text-lg sm:text-xl font-bold hover:from-farm-dark hover:via-farm-green hover:to-farm-accent transition-all duration-500 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-2xl hover:shadow-glow group overflow-hidden w-full sm:w-auto">
                 <div
@@ -836,6 +1064,131 @@
             addMouseTrail();
         });
     </script>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="help-modal hidden">
+        <div class="help-content">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                    <div class="bg-gradient-to-r from-farm-green to-farm-accent p-2 rounded-lg mr-3">
+                        <i class="fas fa-question-circle text-white"></i>
+                    </div>
+                    Farm Biodiversity Assistant - Help
+                </h2>
+                <button onclick="hideHelpModal()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Getting Started Section -->
+                <div class="help-section">
+                    <h3>🚀 Getting Started</h3>
+                    <ul class="help-list">
+                        <li>
+                            <i class="fas fa-camera text-farm-green"></i>
+                            <span><strong>Upload or Capture:</strong> Take a photo of your farmland or upload an existing image using the camera button or drag-and-drop area.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-edit text-blue-500"></i>
+                            <span><strong>Add Details:</strong> Include information about soil type, pH levels, and location for more accurate recommendations.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-crosshairs text-red-500"></i>
+                            <span><strong>GPS Location:</strong> Click the GPS button to automatically detect your location for climate-aware suggestions.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-magic text-purple-500"></i>
+                            <span><strong>AI Analysis:</strong> Our AI will identify crops in your image and suggest companion plants for better biodiversity.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Features Section -->
+                <div class="help-section">
+                    <h3>✨ Key Features</h3>
+                    <ul class="help-list">
+                        <li>
+                            <i class="fas fa-seedling text-green-500"></i>
+                            <span><strong>Crop Identification:</strong> AI-powered recognition of plants in your farm images.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-handshake text-blue-500"></i>
+                            <span><strong>Companion Planting:</strong> Smart recommendations for plants that grow well together.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-book text-farm-green"></i>
+                            <span><strong>Farming Diary:</strong> Track your crop growth and farming activities over time.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-download text-gray-600"></i>
+                            <span><strong>Export Results:</strong> Save your recommendations and analysis for future reference.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tips Section -->
+                <div class="help-section">
+                    <h3>💡 Pro Tips</h3>
+                    <ul class="help-list">
+                        <li>
+                            <i class="fas fa-sun text-yellow-500"></i>
+                            <span><strong>Best Photos:</strong> Take clear, well-lit photos during daylight for better AI recognition.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-layer-group text-indigo-500"></i>
+                            <span><strong>Soil Information:</strong> Providing soil type and pH helps generate more accurate companion plant suggestions.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt text-red-500"></i>
+                            <span><strong>Location Matters:</strong> GPS location enables climate-specific recommendations for your region.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-calendar-alt text-farm-green"></i>
+                            <span><strong>Track Progress:</strong> Use the Farming Diary to monitor your crops and plan future plantings.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Troubleshooting Section -->
+                <div class="help-section">
+                    <h3>🔧 Troubleshooting</h3>
+                    <ul class="help-list">
+                        <li>
+                            <i class="fas fa-exclamation-triangle text-orange-500"></i>
+                            <span><strong>Upload Issues:</strong> Ensure your image is in JPEG or PNG format and under 10MB.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-wifi text-blue-500"></i>
+                            <span><strong>Connection Problems:</strong> Check your internet connection if AI analysis fails.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-shield-alt text-green-500"></i>
+                            <span><strong>GPS Not Working:</strong> Enable location permissions in your browser settings.</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-refresh text-purple-500"></i>
+                            <span><strong>Start Over:</strong> Use the "Start Over" button to reset the form and try again.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <p class="text-gray-600 mb-4">Need more help? Check out our farming diary for detailed crop tracking!</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="/diary" class="btn-primary bg-gradient-to-r from-farm-green to-farm-accent text-white px-6 py-3 rounded-xl hover:from-farm-dark hover:to-farm-secondary transition-all duration-300 inline-flex items-center justify-center">
+                        <i class="fas fa-book mr-2"></i>
+                        Open Farming Diary
+                    </a>
+                    <button onclick="hideHelpModal()" class="btn-secondary bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all duration-300">
+                        <i class="fas fa-times mr-2"></i>
+                        Close Help
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <style>
         .ripple {

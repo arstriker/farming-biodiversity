@@ -26,6 +26,17 @@ const retryBtn = document.getElementById('retryBtn');
 const startOver = document.getElementById('startOver');
 const saveResults = document.getElementById('saveResults');
 
+// GPS elements
+const getLocationBtn = document.getElementById('getLocationBtn');
+const gpsStatus = document.getElementById('gpsStatus');
+const gpsCoordinates = document.getElementById('gpsCoordinates');
+const coordinatesText = document.getElementById('coordinatesText');
+const clearGpsBtn = document.getElementById('clearGpsBtn');
+const locationInput = document.getElementById('location');
+
+// GPS variables
+let currentGPSLocation = null;
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', function () {
     initializeEventListeners();
@@ -55,6 +66,18 @@ function initializeEventListeners() {
 
     // Recommendations
     getRecommendations.addEventListener('click', fetchRecommendations);
+
+    // GPS location
+    if (getLocationBtn) {
+        console.log('GPS button found, adding event listener');
+        getLocationBtn.addEventListener('click', getCurrentLocation);
+    } else {
+        console.error('GPS button not found!');
+    }
+
+    if (clearGpsBtn) {
+        clearGpsBtn.addEventListener('click', clearGPSLocation);
+    }
 
     // Action buttons
     startOver.addEventListener('click', resetApp);
@@ -161,9 +184,18 @@ async function handleFormSubmit(e) {
 
     showLoading();
 
+    // Get soil and location data
+    const soilType = document.getElementById('soilType').value;
+    const soilPH = document.getElementById('soilPH').value;
+    const locationData = getLocationData();
+
     const formData = new FormData();
     formData.append('image', imageFile);
     formData.append('text', textInput.value);
+    formData.append('soilType', soilType);
+    formData.append('soilPH', soilPH);
+    formData.append('location', locationData.text);
+    formData.append('gpsCoordinates', JSON.stringify(locationData.coordinates));
 
     try {
         const response = await fetch('/analyze', {
@@ -268,13 +300,24 @@ async function fetchRecommendations() {
 
     const cropNames = currentCrops.map(crop => crop.name);
 
+    // Get soil and location data
+    const soilType = document.getElementById('soilType').value;
+    const soilPH = document.getElementById('soilPH').value;
+    const locationData = getLocationData();
+
     try {
         const response = await fetch('/recommend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ crops: cropNames })
+            body: JSON.stringify({
+                crops: cropNames,
+                soilType: soilType,
+                soilPH: soilPH,
+                location: locationData.text,
+                gpsCoordinates: locationData.coordinates
+            })
         });
 
         const data = await response.json();
@@ -361,6 +404,14 @@ function resetApp() {
     uploadForm.reset();
     textInput.value = '';
 
+    // Reset soil and location fields
+    document.getElementById('soilType').value = '';
+    document.getElementById('soilPH').value = '';
+    document.getElementById('location').value = '';
+
+    // Reset GPS location
+    clearGPSLocation();
+
     // Reset UI
     uploadArea.classList.remove('hidden');
     imagePreview.classList.add('hidden');
@@ -428,7 +479,7 @@ function initializeScrollAnimations() {
 // Stagger animations for elements
 function initializeStaggerAnimations() {
     const staggerContainers = document.querySelectorAll('.stagger-animation');
-    
+
     staggerContainers.forEach(container => {
         const children = container.children;
         Array.from(children).forEach((child, index) => {
@@ -439,25 +490,25 @@ function initializeStaggerAnimations() {
 
 // Enhanced mobile touch interactions
 function addTouchFeedback(element) {
-    element.addEventListener('touchstart', function() {
+    element.addEventListener('touchstart', function () {
         this.style.transform = 'scale(0.98)';
     });
-    
-    element.addEventListener('touchend', function() {
+
+    element.addEventListener('touchend', function () {
         this.style.transform = '';
     });
 }
 
 // Add touch feedback to interactive elements
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const interactiveElements = document.querySelectorAll('button, .cursor-pointer');
     interactiveElements.forEach(addTouchFeedback);
 });
 
 // Smooth scroll for better UX
 function smoothScrollTo(element) {
-    element.scrollIntoView({ 
-        behavior: 'smooth', 
+    element.scrollIntoView({
+        behavior: 'smooth',
         block: 'center',
         inline: 'nearest'
     });
@@ -483,18 +534,214 @@ function showLoadingWithAnimation() {
 function handleResponsiveImage(img) {
     const maxWidth = window.innerWidth < 768 ? 300 : 400;
     const maxHeight = window.innerWidth < 768 ? 200 : 300;
-    
+
     if (img.naturalWidth > maxWidth || img.naturalHeight > maxHeight) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        
+
         const ratio = Math.min(maxWidth / img.naturalWidth, maxHeight / img.naturalHeight);
         canvas.width = img.naturalWidth * ratio;
         canvas.height = img.naturalHeight * ratio;
-        
+
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         return canvas.toDataURL('image/jpeg', 0.8);
     }
-    
+
     return img.src;
 }
+
+// Error handling function
+function showError(message) {
+    console.error('Error:', message);
+    alert(message); // Simple alert for now - can be enhanced later
+}
+
+// GPS Location Functions
+async function getCurrentLocation() {
+    console.log('GPS button clicked!'); // Debug log
+
+    if (!navigator.geolocation) {
+        showError('Geolocation is not supported by this browser.');
+        return;
+    }
+
+    // Show loading status
+    gpsStatus.classList.remove('hidden');
+    getLocationBtn.disabled = true;
+    getLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i>';
+
+    const options = {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes
+    };
+
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
+        });
+
+        const { latitude, longitude } = position.coords;
+        currentGPSLocation = { latitude, longitude };
+
+        // Display coordinates
+        coordinatesText.textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+        gpsCoordinates.classList.remove('hidden');
+
+        // Try to get human-readable address
+        try {
+            const address = await reverseGeocode(latitude, longitude);
+            if (address) {
+                locationInput.value = address;
+                locationInput.style.backgroundColor = '#f0fdf4'; // Light green background
+                locationInput.style.borderColor = '#22c55e'; // Green border
+            }
+        } catch (geocodeError) {
+            console.log('Reverse geocoding failed, using coordinates only');
+            locationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+        }
+
+        // Show success feedback
+        showLocationSuccess();
+
+    } catch (error) {
+        handleLocationError(error);
+    } finally {
+        // Hide loading status
+        gpsStatus.classList.add('hidden');
+        getLocationBtn.disabled = false;
+        getLocationBtn.innerHTML = '<i class="fas fa-crosshairs text-sm"></i>';
+    }
+}
+
+async function reverseGeocode(latitude, longitude) {
+    try {
+        // Using a free geocoding service (OpenStreetMap Nominatim)
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`,
+            {
+                headers: {
+                    'User-Agent': 'FarmingBiodiversityApp/1.0'
+                }
+            }
+        );
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data && data.display_name) {
+                // Extract city, state, country from the response
+                const address = data.address || {};
+                const parts = [];
+
+                if (address.city || address.town || address.village) {
+                    parts.push(address.city || address.town || address.village);
+                }
+                if (address.state) {
+                    parts.push(address.state);
+                }
+                if (address.country) {
+                    parts.push(address.country);
+                }
+
+                return parts.length > 0 ? parts.join(', ') : data.display_name;
+            }
+        }
+    } catch (error) {
+        console.log('Geocoding service unavailable:', error);
+    }
+    return null;
+}
+
+function handleLocationError(error) {
+    let errorMessage = 'Unable to get your location. ';
+
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            errorMessage += 'Location access was denied. Please enable location permissions and try again.';
+            break;
+        case error.POSITION_UNAVAILABLE:
+            errorMessage += 'Location information is unavailable. Please check your GPS settings.';
+            break;
+        case error.TIMEOUT:
+            errorMessage += 'Location request timed out. Please try again.';
+            break;
+        default:
+            errorMessage += 'An unknown error occurred while getting your location.';
+            break;
+    }
+
+    showError(errorMessage);
+}
+
+function showLocationSuccess() {
+    // Create temporary success message
+    const successDiv = document.createElement('div');
+    successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in';
+    successDiv.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Location obtained successfully!';
+
+    document.body.appendChild(successDiv);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
+}
+
+function clearGPSLocation() {
+    currentGPSLocation = null;
+    gpsCoordinates.classList.add('hidden');
+    coordinatesText.textContent = '';
+
+    // Reset location input styling
+    locationInput.style.backgroundColor = '';
+    locationInput.style.borderColor = '';
+
+    // Clear location input if it contains coordinates
+    const locationValue = locationInput.value;
+    if (locationValue && /^-?\d+\.\d+,\s*-?\d+\.\d+$/.test(locationValue)) {
+        locationInput.value = '';
+    }
+}
+
+// Update form submission to include GPS coordinates
+function getLocationData() {
+    const locationText = locationInput.value;
+    const locationData = {
+        text: locationText,
+        coordinates: currentGPSLocation
+    };
+
+    return locationData;
+}
+
+// Help Modal Functions
+function showHelpModal() {
+    const modal = document.getElementById('helpModal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+}
+
+function hideHelpModal() {
+    const modal = document.getElementById('helpModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('helpModal');
+    if (modal && event.target === modal) {
+        hideHelpModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        hideHelpModal();
+    }
+});
